@@ -14,8 +14,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy 
 {
-	private String bla = "bla";
-	
 	public void preInit(FMLPreInitializationEvent e) 
 	{
 		ModBlocks.loadBlocks();
