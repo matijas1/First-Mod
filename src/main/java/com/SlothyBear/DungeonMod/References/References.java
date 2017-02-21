@@ -9,4 +9,6 @@ public class References
 	public static final String dungeonBrick = "dungeon_brick";
 	
 	public static final String dungeonStaff = "dungeon_staff";
+	
+	public static final int dungeonid = 133;
 }

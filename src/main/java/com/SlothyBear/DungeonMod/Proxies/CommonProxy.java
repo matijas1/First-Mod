@@ -3,6 +3,7 @@ package com.SlothyBear.DungeonMod.Proxies;
 import java.util.List;
 
 import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
+import com.SlothyBear.DungeonMod.Dimnsion.Dimensions;
 import com.SlothyBear.DungeonMod.Items.ModItems;
 import com.SlothyBear.DungeonMod.Recipes.Recipes;
 
@@ -23,6 +24,7 @@ public class CommonProxy
     public void init(FMLInitializationEvent e) 
     {
     	Recipes.loadRecipes();
+    	Dimensions.loadDimensions();
     }
 
     public void postInit(FMLPostInitializationEvent e) 
