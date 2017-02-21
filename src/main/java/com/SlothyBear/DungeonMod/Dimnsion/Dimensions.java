@@ -2,7 +2,10 @@ package com.SlothyBear.DungeonMod.Dimnsion;
 
 import com.SlothyBear.DungeonMod.References.References;
 
+import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraftforge.common.DimensionManager;
 
 public class Dimensions 
