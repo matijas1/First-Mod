@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
@@ -63,7 +64,10 @@ public class DungeonChunkProvider implements IChunkGenerator
 				{
 					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
 					Chunk chunk = world.getChunkFromChunkCoords(x, z);
-					chunk.setBlockState(pos, Blocks.AIR.getDefaultState());
+					if(j == 1)
+						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
+					else
+						chunk.setBlockState(pos, Blocks.AIR.getDefaultState());
 				}
 			}
 		}

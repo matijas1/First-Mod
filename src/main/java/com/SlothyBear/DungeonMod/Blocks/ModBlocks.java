@@ -10,10 +10,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModBlocks 
 {
 	public static Block dungeonBrick;
+	public static Block dungeonPortal;
 	
 	public static void loadBlocks()
 	{
 		dungeonBrick = new DungeonBrick(Material.ROCK);
+		dungeonPortal = new DungeonPortal(Material.ROCK);
 	}
 	
 	public static Block registerBlock(Block block, ItemBlock item, String name)

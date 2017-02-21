@@ -1,5 +1,6 @@
 package com.SlothyBear.DungeonMod.Dimnsion;
 
+import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
 import com.SlothyBear.DungeonMod.References.References;
 
 import net.minecraft.init.Biomes;
