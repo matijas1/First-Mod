@@ -45,7 +45,7 @@ public class DungeonPortal extends Block
 		{
 			if(playerIn.getHeldItemMainhand() == null)
 			{
-				if(playerIn.dimension == References.dungeonid)
+				if(playerIn.dimension == -1)
 				{
 					playerIn.changeDimension(0);
 					BlockPos spawnPos = playerIn.getEntityWorld().getSpawnPoint();
@@ -54,7 +54,7 @@ public class DungeonPortal extends Block
 				}
 				else
 				{
-					playerIn.changeDimension(References.dungeonid);
+					playerIn.changeDimension(-1);
 					int spawnHeight = 1;
 					for(int j = 1; j < 128; j++)
 					{
