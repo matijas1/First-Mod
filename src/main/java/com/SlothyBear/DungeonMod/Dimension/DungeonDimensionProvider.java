@@ -1,4 +1,4 @@
-package com.SlothyBear.DungeonMod.Dimnsion;
+package com.SlothyBear.DungeonMod.Dimension;
 
 import com.SlothyBear.DungeonMod.Blocks.DungeonPortal;
 import com.SlothyBear.DungeonMod.Blocks.ModBlocks;

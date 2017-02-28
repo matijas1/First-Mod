@@ -1,4 +1,4 @@
-package com.SlothyyBear.DungeonMod.Events;
+package com.SlothyBear.DungeonMod.Events;
 
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;

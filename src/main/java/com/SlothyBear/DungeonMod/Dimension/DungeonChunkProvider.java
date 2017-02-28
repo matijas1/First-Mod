@@ -1,4 +1,4 @@
-package com.SlothyBear.DungeonMod.Dimnsion;
+package com.SlothyBear.DungeonMod.Dimension;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,13 +33,17 @@ import net.minecraft.world.chunk.IChunkGenerator;
 
 public class DungeonChunkProvider implements IChunkGenerator
 {
+	private static final int RNGESUS = 1000;
+	
 	private World world;
 	private Random rand;
+	private long seed;
 	
 	public DungeonChunkProvider(World world, long seed)
 	{
 		this.world = world;
-		this.rand = new Random(seed);
+		//this.rand = new Random(seed);
+		this.seed = seed;
 		this.world.setSeaLevel(0);
 	}
 
@@ -56,6 +60,9 @@ public class DungeonChunkProvider implements IChunkGenerator
 	{
 		int blockX = x * 16;
 		int blockZ = z * 16;
+		
+		int roomNo;
+		
 		for(int i = 0; i < 16; i++)
 		{
 			for(int j = 127; j >= 0; j--)
@@ -64,7 +71,9 @@ public class DungeonChunkProvider implements IChunkGenerator
 				{
 					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
 					Chunk chunk = world.getChunkFromChunkCoords(x, z);
-					if(j == 1)
+					if(j == 1 || j == 8)
+						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
+					else if((i == 0 || i == 15 || k == 0 || k == 15) && j < 8)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
 					else
 						chunk.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -95,5 +104,11 @@ public class DungeonChunkProvider implements IChunkGenerator
 	public void recreateStructures(Chunk chunkIn, int x, int z) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	public int randomGen(){
+		Random generator = new Random(this.seed);
+	    return generator.nextInt(RNGESUS);
 	}
 }

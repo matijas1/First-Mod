@@ -3,7 +3,7 @@ package com.SlothyBear.DungeonMod.Proxies;
 import java.util.List;
 
 import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
-import com.SlothyBear.DungeonMod.Dimnsion.Dimensions;
+import com.SlothyBear.DungeonMod.Dimension.Dimensions;
 import com.SlothyBear.DungeonMod.Items.ModItems;
 import com.SlothyBear.DungeonMod.Recipes.Recipes;
 
