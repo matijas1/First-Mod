@@ -1,6 +1,6 @@
 package com.SlothyBear.DungeonMod.Blocks;
 
-import com.SlothyBear.DungeonMod.Dimnsion.DungeonTeleporter;
+import com.SlothyBear.DungeonMod.Dimension.DungeonTeleporter;
 import com.SlothyBear.DungeonMod.References.References;
 
 import net.minecraft.block.Block;

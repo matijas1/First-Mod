@@ -1,4 +1,4 @@
-package com.SlothyBear.DungeonMod.Dimnsion;
+package com.SlothyBear.DungeonMod.Dimension;
 
 import java.util.List;
 import java.util.Random;

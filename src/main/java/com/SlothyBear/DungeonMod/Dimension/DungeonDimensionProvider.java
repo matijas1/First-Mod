@@ -1,4 +1,4 @@
-package com.SlothyBear.DungeonMod.Dimnsion;
+package com.SlothyBear.DungeonMod.Dimension;
 
 import com.SlothyBear.DungeonMod.References.References;
 
