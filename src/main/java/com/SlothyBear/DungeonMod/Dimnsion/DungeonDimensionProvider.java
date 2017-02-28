@@ -1,15 +1,10 @@
 package com.SlothyBear.DungeonMod.Dimnsion;
 
-import com.SlothyBear.DungeonMod.Blocks.DungeonPortal;
-import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
 import com.SlothyBear.DungeonMod.References.References;
 
 import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.Teleporter;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.IChunkGenerator;
 
