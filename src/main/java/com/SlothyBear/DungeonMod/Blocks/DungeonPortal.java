@@ -1,6 +1,7 @@
 package com.SlothyBear.DungeonMod.Blocks;
 
 import com.SlothyBear.DungeonMod.Dimension.DungeonTeleporter;
+import com.SlothyBear.DungeonMod.Dimnsion.DungeonTeleporter;
 import com.SlothyBear.DungeonMod.References.References;
 
 import ibxm.Player;
@@ -20,7 +21,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
