@@ -1,7 +1,10 @@
 package com.SlothyBear.DungeonMod.Blocks;
 
 import com.SlothyBear.DungeonMod.Dimension.DungeonTeleporter;
+<<<<<<< HEAD
 import com.SlothyBear.DungeonMod.Dimnsion.DungeonTeleporter;
+=======
+>>>>>>> 723076f51ddfd8ad0f55d9daeedcb9b962e6fcf3
 import com.SlothyBear.DungeonMod.References.References;
 
 import ibxm.Player;
@@ -22,7 +25,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+<<<<<<< HEAD
 import net.minecraft.world.WorldServer;
+=======
+>>>>>>> 723076f51ddfd8ad0f55d9daeedcb9b962e6fcf3
 
 public class DungeonPortal extends Block
 {
