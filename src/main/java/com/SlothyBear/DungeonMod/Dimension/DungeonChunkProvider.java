@@ -3,10 +3,8 @@ package com.SlothyBear.DungeonMod.Dimension;
 import java.util.List;
 import java.util.Random;
 
-import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
 
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
@@ -24,7 +22,7 @@ public class DungeonChunkProvider implements IChunkGenerator
 	public DungeonChunkProvider(World world, long seed)
 	{
 		this.world = world;
-		//this.rand = new Random(seed);
+		this.rand = new Random(seed);
 		this.seed = seed;
 		this.world.setSeaLevel(0);
 	}
@@ -40,28 +38,9 @@ public class DungeonChunkProvider implements IChunkGenerator
 	@Override
 	public void populate(int x, int z) 
 	{
-		int blockX = x * 16;
-		int blockZ = z * 16;
-		
-		int roomNo;
-		
-		for(int i = 0; i < 16; i++)
-		{
-			for(int j = 127; j >= 0; j--)
-			{
-				for(int k = 0; k < 16; k++)
-				{
-					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
-					Chunk chunk = world.getChunkFromChunkCoords(x, z);
-					if(j == 1 || j == 8)
-						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
-					else if((i == 0 || i == 15 || k == 0 || k == 15) && j < 8)
-						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
-					else
-						chunk.setBlockState(pos, Blocks.AIR.getDefaultState());
-				}
-			}
-		}
+		Chunk chunk = world.getChunkFromChunkCoords(x, z);
+		DungeonRoomProvider provider = new DungeonRoomProvider(chunk);
+		provider.generateChunk(rand.nextInt(100),x, z);
 	}
 
 	@Override
