@@ -47,7 +47,7 @@ public class DungeonRoomProvider {
 		int blockZ = z * 16;
 
 		defaultRooms(x, z);
-		BlockPos pos = new BlockPos(blockX + 8, 1, blockZ + 8);
+		BlockPos pos = new BlockPos(blockX + 8, 2, blockZ + 8);
 		chunk.setBlockState(pos, ModBlocks.dungeonPortal.getDefaultState());
 	}
 
@@ -56,15 +56,16 @@ public class DungeonRoomProvider {
 		int blockZ = z * 16;
 
 		defaultRooms(x, z);
-		for (int j = 1; j < 7; j++) {
+		for (int j = 2; j < 8; j++) {
 			BlockPos pos1 = new BlockPos(blockX + 4, j, blockZ + 8);
 			BlockPos pos2 = new BlockPos(blockX + 12, j, blockZ + 8);
-			if (j != 3) {
+			if (j != 4) {
 				chunk.setBlockState(pos1, ModBlocks.dungeonBrick.getDefaultState());
 				chunk.setBlockState(pos2, ModBlocks.dungeonBrick.getDefaultState());
 			} else {
 				chunk.setBlockState(pos1, Blocks.MOB_SPAWNER.getDefaultState());
 				chunk.setBlockState(pos2, Blocks.MOB_SPAWNER.getDefaultState());
+				
 			}
 		}
 
