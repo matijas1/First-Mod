@@ -29,7 +29,7 @@ public class DungeonRoomProvider {
 			for (int j = 127; j >= 0; j--) {
 				for (int k = 0; k < 16; k++) {
 					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
-					if(j == 0)
+					if (j == 0)
 						chunk.setBlockState(pos, Blocks.BEDROCK.getDefaultState());
 					else if (j == 1 || j == 8)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
@@ -65,7 +65,7 @@ public class DungeonRoomProvider {
 			} else {
 				chunk.setBlockState(pos1, Blocks.MOB_SPAWNER.getDefaultState());
 				chunk.setBlockState(pos2, Blocks.MOB_SPAWNER.getDefaultState());
-				
+
 			}
 		}
 

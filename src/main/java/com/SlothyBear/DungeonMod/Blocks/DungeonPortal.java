@@ -17,48 +17,50 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class DungeonPortal extends Block
-{
+public class DungeonPortal extends Block {
 	public final String name = References.dungeonPortal;
-	
-	public DungeonPortal(Material mat) 
-	{
+
+	public DungeonPortal(Material mat) {
 		super(mat);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		this.setBlockUnbreakable();
 		this.setSoundType(SoundType.STONE);
 		this.setResistance(18000000.0F);
 		this.setUnlocalizedName(name);
-		
-		ModBlocks.registerBlock(this,new ItemBlock(this), name);
+
+		ModBlocks.registerBlock(this, new ItemBlock(this), name);
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
-	{
-		if(!playerIn.worldObj.isRemote && !playerIn.isDead)
-		{
-			if(heldItem == null)
-			{
-				if(playerIn.dimension == References.dungeonid)
-				{
-					DungeonTeleporter teleporter = new DungeonTeleporter(playerIn.getServer().worldServerForDimension(0));
-					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP)playerIn, 0, teleporter);
+			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!playerIn.worldObj.isRemote && !playerIn.isDead) {
+			if (heldItem == null) {
+				if (playerIn.dimension == References.dungeonid) {
+					DungeonTeleporter teleporter = new DungeonTeleporter(
+							playerIn.getServer().worldServerForDimension(0));
+					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, 0,
+							teleporter);
+					return true;
+				} else {
+					DungeonTeleporter teleporter = new DungeonTeleporter(
+							playerIn.getServer().worldServerForDimension(References.dungeonid));
+					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn,
+							References.dungeonid, teleporter);
 					return true;
 				}
-				else
-				{
-					DungeonTeleporter teleporter = new DungeonTeleporter(playerIn.getServer().worldServerForDimension(References.dungeonid));
-					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP)playerIn, References.dungeonid, teleporter);
-					return true;
-				}
-			}
-			else
+			} else
 				return false;
-		}
-		else
+		} else
 			return false;
 	}
-}
 
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+}
