@@ -36,6 +36,7 @@ public class ClientProxy extends CommonProxy
 		for(Block block : blocks)
 		{
 			System.err.println(block.getRegistryName() + "   " + block.getUnlocalizedName());
+			System.out.println("AAAAAAAAAAA" + block.getRegistryName().toString());
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName().toString()));
 		}
 		for(Item item : items)
