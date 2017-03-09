@@ -21,7 +21,7 @@ public class Main
 	private static List<Block> blocks = new LinkedList<Block>();
 	private static List<Item> items = new LinkedList<Item>();
 	
-	@SidedProxy(clientSide="com.SlothyBear.DungeonMod.Proxies.ClientProxy", serverSide="com.SlothyBear.DungeonMod.Proxies.CommonProxy")
+	@SidedProxy(clientSide="com.SlothyBear.DungeonMod.Proxies.ClientProxy", serverSide="com.SlothyBear.DungeonMod.Proxies.ServerProxy")
     public static CommonProxy proxy;
 	
 	@EventHandler

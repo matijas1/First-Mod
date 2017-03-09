@@ -1,6 +1,8 @@
 package com.SlothyBear.DungeonMod.Blocks;
 
+
 import com.SlothyBear.DungeonMod.Dimension.DungeonTeleporter;
+import com.SlothyBear.DungeonMod.Items.DungeonStaff;
 import com.SlothyBear.DungeonMod.References.References;
 
 import net.minecraft.block.Block;
@@ -16,6 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class DungeonPortal extends Block {
 	public final String name = References.dungeonPortal;
@@ -34,11 +37,13 @@ public class DungeonPortal extends Block {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!playerIn.worldObj.isRemote && !playerIn.isDead) {
-			if (heldItem == null) {
+		if (!playerIn.worldObj.isRemote && !playerIn.isDead && heldItem != null) {
+			if (heldItem.getItem() instanceof DungeonStaff) {
+				DungeonStaff staff = (DungeonStaff) heldItem.getItem();
 				if (playerIn.dimension == References.dungeonid) {
+					WorldServer worldserver = playerIn.getServer().worldServerForDimension(0);
 					DungeonTeleporter teleporter = new DungeonTeleporter(
-							playerIn.getServer().worldServerForDimension(0));
+							worldserver);
 					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, 0,
 							teleporter);
 					return true;
@@ -47,6 +52,8 @@ public class DungeonPortal extends Block {
 							playerIn.getServer().worldServerForDimension(References.dungeonid));
 					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn,
 							References.dungeonid, teleporter);
+					if(staff.portal[0] != null)
+						playerIn.setPositionAndUpdate(staff.portal[0], staff.portal[1], staff.portal[2]);
 					return true;
 				}
 			} else
@@ -62,5 +69,6 @@ public class DungeonPortal extends Block {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-
+	
+	
 }

@@ -12,4 +12,6 @@ public class References
 	public static final String dungeonStaff = "dungeon_staff";
 	
 	public static final int dungeonid = 133;
+	
+	public static final int[] startingportallocation = new int[3];
 }
