@@ -11,11 +11,13 @@ public class ModBlocks
 {
 	public static Block dungeonBrick;
 	public static Block dungeonPortal;
+	public static Block dungeonChest;
 	
 	public static void loadBlocks()
 	{
 		dungeonBrick = new DungeonBrick(Material.ROCK);
 		dungeonPortal = new DungeonPortal(Material.ROCK);
+		dungeonChest = new DungeonChest(DungeonChest.Type.BASIC_LOCKED);
 	}
 	
 	public static Block registerBlock(Block block, ItemBlock item, String name)
