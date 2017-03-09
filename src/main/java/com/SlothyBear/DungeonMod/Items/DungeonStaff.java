@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 public class DungeonStaff extends Item
 {
 	public final String name = References.dungeonStaff;
+	public Integer portal[] = new Integer[3];
 	
 	public DungeonStaff()
 	{
@@ -17,4 +18,5 @@ public class DungeonStaff extends Item
 		
 		ModItems.registerItem(this, name);
 	}
+	
 }
