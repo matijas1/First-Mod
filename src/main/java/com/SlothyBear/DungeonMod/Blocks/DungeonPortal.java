@@ -31,7 +31,7 @@ public class DungeonPortal extends Block {
 		this.setResistance(18000000.0F);
 		this.setUnlocalizedName(name);
 
-		ModBlocks.registerBlock(this, new ItemBlock(this), name);
+		ModBlocks.registerBlock(this, new ItemBlock(this), name, "");
 	}
 
 	@Override

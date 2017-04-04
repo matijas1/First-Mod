@@ -6,6 +6,7 @@ import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
 import com.SlothyBear.DungeonMod.Dimension.Dimensions;
 import com.SlothyBear.DungeonMod.Events.EventHandler;
 import com.SlothyBear.DungeonMod.Items.ModItems;
+import com.SlothyBear.DungeonMod.LootTables.LootTables;
 import com.SlothyBear.DungeonMod.Recipes.Recipes;
 
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ public class CommonProxy
     public void init(FMLInitializationEvent e) 
     {
     	Recipes.loadRecipes();
+    	LootTables.register();
     	Dimensions.loadDimensions();
     	MinecraftForge.EVENT_BUS.register(new EventHandler());
     }

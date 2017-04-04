@@ -2,15 +2,26 @@ package com.SlothyBear.DungeonMod.Events;
 
 import java.util.List;
 
+import com.SlothyBear.DungeonMod.Blocks.DungeonChest;
 import com.SlothyBear.DungeonMod.Blocks.DungeonPortal;
+import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
+import com.SlothyBear.DungeonMod.Items.DungeonChestKey;
 import com.SlothyBear.DungeonMod.Items.DungeonStaff;
+import com.SlothyBear.DungeonMod.TileEntities.TileEntityDungeonChest;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EventHandler 
@@ -92,6 +103,76 @@ public class EventHandler
 					staff.portal[1] = coords[1];
 					staff.portal[2] = coords[2];
 				}
+			}
+		}
+		
+		if(!e.getWorld().isRemote && e.getWorld().getTileEntity(e.getPos()) instanceof TileEntityDungeonChest)
+		{
+			TileEntityDungeonChest chest = (TileEntityDungeonChest) e.getWorld().getTileEntity(e.getPos());
+			
+			if(e.isCancelable() && chest.isLocked() && e.getItemStack() == null)
+			{
+				e.getEntityPlayer().addChatMessage(new TextComponentString("This chest is locked!"));
+				e.setCanceled(true);
+			}
+			else if(e.isCancelable() && chest.isLocked() && !(e.getItemStack().getItem() instanceof DungeonChestKey))
+			{
+				e.getEntityPlayer().addChatMessage(new TextComponentString("This chest is locked!"));
+				e.setCanceled(true);
+			}
+			else if(chest.isLocked() && e.getItemStack().getItem() instanceof DungeonChestKey)
+			{
+				NBTTagCompound compound = new NBTTagCompound();
+				chest.writeToNBT(compound);
+				compound.setString("Type", "unlocked");
+				e.getWorld().setBlockState(e.getPos(), ModBlocks.unlockedDungeonChest.getDefaultState());
+				TileEntityDungeonChest newchest = (TileEntityDungeonChest)e.getWorld().getTileEntity(e.getPos());
+				newchest.readFromNBT(compound);
+				e.getItemStack().stackSize--;
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void breakBlock(BreakEvent e)
+	{
+		Block block = e.getState().getBlock();
+		ItemStack itemstack = e.getPlayer().inventory.getCurrentItem();
+		BlockPos pos = e.getPos();
+		World world = e.getWorld();
+		
+		if(block instanceof DungeonChest)
+		{
+			DungeonChest chest = (DungeonChest)block;
+			ItemStack blockstack = new ItemStack(block);
+			NBTTagCompound compound = new NBTTagCompound();
+			compound = blockstack.writeToNBT(compound);
+			if(chest.isLocked())
+				compound.setString("Type", "locked");
+			else
+				compound.setString("Type", "unlocked");
+			blockstack.readFromNBT(compound);
+			
+			world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), blockstack));
+		}
+	}
+	
+	@SubscribeEvent
+	public void breakSpeed(BreakSpeed e)
+	{
+		ItemStack itemstack = e.getEntityPlayer().inventory.getCurrentItem();
+		Block block = e.getState().getBlock();
+		
+		if(block instanceof DungeonChest)
+		{
+			DungeonChest chest = (DungeonChest) block;
+			if(chest.isLocked())
+				e.setNewSpeed(0F);
+			else if(itemstack == null)
+				e.setNewSpeed(e.getOriginalSpeed() * 1.25F);
+			else if(!(itemstack.getItem() instanceof ItemPickaxe))
+			{
+				e.setNewSpeed(e.getOriginalSpeed() * 1.25F);
 			}
 		}
 	}

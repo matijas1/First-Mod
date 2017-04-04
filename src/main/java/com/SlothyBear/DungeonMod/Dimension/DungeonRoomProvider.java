@@ -1,6 +1,8 @@
 package com.SlothyBear.DungeonMod.Dimension;
 
 import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
+import com.SlothyBear.DungeonMod.LootTables.LootTables;
+import com.SlothyBear.DungeonMod.TileEntities.TileEntityDungeonChest;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -15,10 +17,14 @@ public class DungeonRoomProvider {
 	}
 
 	public Chunk generateChunk(int rNum, int x, int z) {
-		if (rNum <= 500)
+		if (rNum <= 100)
 			portalRoom(x, z);
-		else if (rNum > 500)
+		else if (rNum <= 200)
 			twoSpawnerRoom(x, z);
+		else if(rNum <= 300)
+			chestRoom(x, z);
+		else if(rNum > 300)
+			stairsRoom(x, z);
 		return this.chunk;
 	}
 
@@ -68,7 +74,48 @@ public class DungeonRoomProvider {
 
 			}
 		}
+	}
+	public void chestRoom(int x, int z)
+	{
+		int blockX = x * 16;
+		int blockZ = z * 16;
 
+		defaultRooms(x, z);
+		BlockPos pos = new BlockPos(blockX + 8, 2, blockZ + 8);
+		chunk.setBlockState(pos, ModBlocks.dungeonChest.getDefaultState());
+		TileEntityDungeonChest chest = (TileEntityDungeonChest)chunk.getWorld().getTileEntity(pos);
+		LootTables.generate(chest);
 	}
 
+	public void stairsRoom(int x, int z)
+	{
+		int blockX = x * 16;
+		int blockZ = z * 16;
+		int stairup = 4;
+
+		defaultRooms(x, z);
+		for (int i = 0; i < 16; i++) {
+			for (int j = 16; j >= 8; j--) {
+				for (int k = 0; k < 16; k++) {
+					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
+					if (j == 16)
+						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
+					else if((i < 7 || i >= 10 || k < 5 || k >= 8) && j == 8)
+						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
+					else if ((i == 0 || k == 0) && j < 16)
+						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
+					else
+						chunk.setBlockState(pos, Blocks.AIR.getDefaultState());
+				}
+			}
+		}
+		for (int i = 7; i < 10; i++) {
+			for (int j = 8; j >= 2; j--) {
+					BlockPos pos = new BlockPos(blockX + i, j, blockZ + stairup);
+					chunk.setBlockState(pos, Blocks.STONE_BRICK_STAIRS.getDefaultState());
+					stairup++;
+				}
+			stairup = 5;
+		}
+	}
 }

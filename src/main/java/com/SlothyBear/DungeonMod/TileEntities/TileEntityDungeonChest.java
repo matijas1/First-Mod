@@ -44,11 +44,11 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
     private int ticksSinceSync;
     private DungeonChest.Type cachedChestType;
     private String customName;
-
+    
     public TileEntityDungeonChest()
     {
     }
-
+    
     public TileEntityDungeonChest(DungeonChest.Type type)
     {
         this.cachedChestType = type;
@@ -150,6 +150,14 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
         {
             this.customName = compound.getString("CustomName");
         }
+        
+        if (compound.hasKey("Type", 8))
+        {
+            if(compound.getString("Type").equals("locked"))
+            	this.cachedChestType = DungeonChest.Type.BASIC_LOCKED;
+            else
+            	this.cachedChestType = DungeonChest.Type.BASIC_UNLOCKED;
+        }
 
         if (!this.checkLootAndRead(compound))
         {
@@ -188,6 +196,12 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
             }
 
             compound.setTag("Items", nbttaglist);
+            if(cachedChestType == DungeonChest.Type.BASIC_LOCKED)
+            {
+            	compound.setString("Type", "locked");
+            }
+            else
+            	compound.setString("Type", "unlocked");
         }
 
         if (this.hasCustomName())
@@ -335,6 +349,11 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
         }
     }
 
+    public boolean isLocked()
+    {
+    	return getChestType().equals(DungeonChest.Type.BASIC_LOCKED);
+    }
+    
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
      * guis use Slot.isItemValid
@@ -359,13 +378,18 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
         {
             if (this.worldObj == null || !(this.getBlockType() instanceof DungeonChest))
             {
-                return DungeonChest.Type.BASIC_LOCKED;
+                return DungeonChest.Type.BASIC_UNLOCKED;
             }
 
             this.cachedChestType = ((DungeonChest)this.getBlockType()).chestType;
         }
 
         return this.cachedChestType;
+    }
+    
+    public void setChestType(DungeonChest.Type type)
+    {
+    	this.cachedChestType = type;
     }
 
     public String getGuiID()
@@ -401,5 +425,11 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
         {
             this.chestContents[i] = null;
         }
+    }
+    
+    @Override
+    public void fillWithLoot(EntityPlayer player) 
+    {
+    	super.fillWithLoot(player);
     }
 }
