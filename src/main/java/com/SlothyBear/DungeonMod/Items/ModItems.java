@@ -8,10 +8,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModItems
 {
 	public static Item dungeonStaff;
+	public static Item dungeonKey;
 	
 	public static void loadItems()
 	{
 		dungeonStaff = new DungeonStaff();
+		dungeonKey = new DungeonChestKey();
 	}
 	
 	public static Item registerItem(Item item, String name)

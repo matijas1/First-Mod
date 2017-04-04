@@ -1,6 +1,6 @@
 {
-    "parent": "item/chest",
+    "parent": "block/cube",
     "textures": {
-        "all": "blocks/stonebrick"
+        "particle": "blocks/planks_oak"
     }
 }

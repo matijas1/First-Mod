@@ -1,12 +1,14 @@
 package com.SlothyBear.DungeonMod.Blocks;
 
+import java.util.List;
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
+import com.SlothyBear.DungeonMod.Particles.BlockBreakParticle;
 import com.SlothyBear.DungeonMod.References.References;
 import com.SlothyBear.DungeonMod.TileEntities.TileEntityDungeonChest;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -15,20 +17,22 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -37,9 +41,11 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class DungeonChest extends BlockContainer {
 
@@ -51,7 +57,7 @@ public class DungeonChest extends BlockContainer {
     protected static final AxisAlignedBB EAST_CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 1.0D, 0.875D, 0.9375D);
     protected static final AxisAlignedBB NOT_CONNECTED_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
     
-    public final DungeonChest.Type chestType;
+    public DungeonChest.Type chestType;
 
     protected DungeonChest(DungeonChest.Type type)
     {
@@ -59,12 +65,29 @@ public class DungeonChest extends BlockContainer {
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.setSoundType(SoundType.METAL);
         this.setCreativeTab(CreativeTabs.DECORATIONS);
-        
+        this.setHardness(3.0F);
+        this.setResistance(10.0F);
         this.chestType = type;
         this.setUnlocalizedName(name);
-        ModBlocks.registerBlock(this, new ItemBlock(this), name);
+		
+        if(this.isLocked())
+        	ModBlocks.registerBlockWithTileEntity(this, new ItemBlock(this), new TileEntityDungeonChest(), name, "_locked");
+        else
+        	ModBlocks.registerBlockWithTileEntity(this, new ItemBlock(this), new TileEntityDungeonChest(), name, "_unlocked");
     }
-
+    
+    @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) 
+    {
+    	return null;
+    }
+    
+    @Override
+    public boolean isToolEffective(String type, IBlockState state) 
+    {
+    	return type.equals("pickaxe");
+    }
+    
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
@@ -155,11 +178,23 @@ public class DungeonChest extends BlockContainer {
         {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityChest)
+            if (tileentity instanceof TileEntityDungeonChest)
             {
-                ((TileEntityChest)tileentity).setCustomName(stack.getDisplayName());
+                ((TileEntityDungeonChest)tileentity).setCustomName(stack.getDisplayName());
             }
         }
+        if(stack.getTagCompound() != null)
+        {
+        	if(stack.getTagCompound().hasKey("Type"))
+        	{
+        		if(stack.getTagCompound().getString("Type").equals("locked"))
+        		{
+        			this.chestType = Type.BASIC_LOCKED;
+        		}
+        		else
+        			this.chestType = Type.BASIC_UNLOCKED;
+        	}
+        } 
     }
 
     
@@ -228,10 +263,32 @@ public class DungeonChest extends BlockContainer {
             InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
             worldIn.updateComparatorOutputLevel(pos, this);
         }
-
         super.breakBlock(worldIn, pos, state);
     }
-
+    
+    @Override
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) 
+    {
+    	if(world.getBlockState(pos).getBlock() instanceof DungeonChest)
+    	{
+    		Random rand = new Random();
+    		Random rand2 = new Random();
+    		for(int i = 0; i < 50; i++)
+    		{
+    			
+    			Particle particle = new BlockBreakParticle(world, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), (rand2.nextInt(3) - 1) * rand.nextDouble() * 0.2, rand.nextDouble() * 0.3, (rand2.nextInt(3) - 1) * rand.nextDouble() * 0.2, world.getBlockState(pos), Blocks.IRON_BLOCK.getDefaultState());
+    			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
+    		}
+    	}
+    	return true;
+    }
+    
+    @Override
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) 
+    {
+    	return true;
+    }
+    
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (worldIn.isRemote)
@@ -277,34 +334,6 @@ public class DungeonChest extends BlockContainer {
             }
             else
             {
-                for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL)
-                {
-                    BlockPos blockpos = p_189418_2_.offset(enumfacing);
-                    Block block = p_189418_1_.getBlockState(blockpos).getBlock();
-
-                    if (block == this)
-                    {
-                        if (this.isBlocked(p_189418_1_, blockpos))
-                        {
-                            return null;
-                        }
-
-                        TileEntity tileentity1 = p_189418_1_.getTileEntity(blockpos);
-
-                        if (tileentity1 instanceof TileEntityDungeonChest)
-                        {
-                            if (enumfacing != EnumFacing.WEST && enumfacing != EnumFacing.NORTH)
-                            {
-                                ilockablecontainer = new InventoryLargeChest("container.chestDouble", ilockablecontainer, (TileEntityChest)tileentity1);
-                            }
-                            else
-                            {
-                                ilockablecontainer = new InventoryLargeChest("container.chestDouble", (TileEntityChest)tileentity1, ilockablecontainer);
-                            }
-                        }
-                    }
-                }
-
                 return ilockablecontainer;
             }
         }
@@ -315,7 +344,7 @@ public class DungeonChest extends BlockContainer {
      */
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileEntityDungeonChest();
+        return new TileEntityDungeonChest(chestType);
     }
 
     /**
@@ -415,6 +444,16 @@ public class DungeonChest extends BlockContainer {
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {FACING});
+    }
+    
+    public void setChestType(Type type)
+    {
+    	this.chestType = type;
+    }
+    
+    public boolean isLocked()
+    {
+    	return this.chestType == Type.BASIC_LOCKED;
     }
 
     public static enum Type

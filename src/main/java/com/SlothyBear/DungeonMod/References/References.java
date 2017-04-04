@@ -11,6 +11,7 @@ public class References
 	public static final String dungeonChest = "dungeon_chest";
 	
 	public static final String dungeonStaff = "dungeon_staff";
+	public static final String dungeonKey = "dungeon_key";
 
 	
 	public static final int dungeonid = 133;
