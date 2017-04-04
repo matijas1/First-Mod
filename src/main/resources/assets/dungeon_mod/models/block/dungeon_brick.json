@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "dungeon_mod:blocks/dungeon_brick"
-    }
-}
