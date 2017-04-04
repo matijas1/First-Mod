@@ -4,43 +4,36 @@ import javax.annotation.Nullable;
 
 import com.SlothyBear.DungeonMod.Blocks.DungeonChest;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityLockableLoot;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.walkers.ItemStackDataLists;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 
 public class TileEntityDungeonChest extends TileEntityLockableLoot implements ITickable, IInventory{
 	private ItemStack[] chestContents = new ItemStack[27];
     /** Determines if the check for adjacent chests has taken place. */
     public boolean adjacentChestChecked;
     /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityChest adjacentChestZNeg;
+    public TileEntityDungeonChest adjacentChestZNeg;
     /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityChest adjacentChestXPos;
+    public TileEntityDungeonChest adjacentChestXPos;
     /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityChest adjacentChestXNeg;
+    public TileEntityDungeonChest adjacentChestXNeg;
     /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityChest adjacentChestZPos;
+    public TileEntityDungeonChest adjacentChestZPos;
     /** The current angle of the lid (between 0 and 1) */
     public float lidAngle;
     /** The angle of the lid last tick */
@@ -333,7 +326,7 @@ public class TileEntityDungeonChest extends TileEntityLockableLoot implements IT
 
     public void closeInventory(EntityPlayer player)
     {
-        if (!player.isSpectator() && this.getBlockType() instanceof BlockChest)
+        if (!player.isSpectator() && this.getBlockType() instanceof DungeonChest)
         {
             --this.numPlayersUsing;
             this.worldObj.addBlockEvent(this.pos, this.getBlockType(), 1, this.numPlayersUsing);

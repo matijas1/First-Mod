@@ -5,8 +5,6 @@ import javax.annotation.Nullable;
 import com.SlothyBear.DungeonMod.References.References;
 import com.SlothyBear.DungeonMod.TileEntities.TileEntityDungeonChest;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -23,12 +21,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -85,11 +81,6 @@ public class DungeonChest extends BlockContainer {
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return source.getBlockState(pos.north()).getBlock() == this ? NORTH_CHEST_AABB : (source.getBlockState(pos.south()).getBlock() == this ? SOUTH_CHEST_AABB : (source.getBlockState(pos.west()).getBlock() == this ? WEST_CHEST_AABB : (source.getBlockState(pos.east()).getBlock() == this ? EAST_CHEST_AABB : NOT_CONNECTED_AABB)));
     }
 
     /**
@@ -155,9 +146,9 @@ public class DungeonChest extends BlockContainer {
         {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityChest)
+            if (tileentity instanceof TileEntityDungeonChest)
             {
-                ((TileEntityChest)tileentity).setCustomName(stack.getDisplayName());
+                ((TileEntityDungeonChest)tileentity).setCustomName(stack.getDisplayName());
             }
         }
     }
@@ -275,36 +266,7 @@ public class DungeonChest extends BlockContainer {
             {
                 return null;
             }
-            else
-            {
-                for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL)
-                {
-                    BlockPos blockpos = p_189418_2_.offset(enumfacing);
-                    Block block = p_189418_1_.getBlockState(blockpos).getBlock();
-
-                    if (block == this)
-                    {
-                        if (this.isBlocked(p_189418_1_, blockpos))
-                        {
-                            return null;
-                        }
-
-                        TileEntity tileentity1 = p_189418_1_.getTileEntity(blockpos);
-
-                        if (tileentity1 instanceof TileEntityDungeonChest)
-                        {
-                            if (enumfacing != EnumFacing.WEST && enumfacing != EnumFacing.NORTH)
-                            {
-                                ilockablecontainer = new InventoryLargeChest("container.chestDouble", ilockablecontainer, (TileEntityChest)tileentity1);
-                            }
-                            else
-                            {
-                                ilockablecontainer = new InventoryLargeChest("container.chestDouble", (TileEntityChest)tileentity1, ilockablecontainer);
-                            }
-                        }
-                    }
-                }
-
+            else{
                 return ilockablecontainer;
             }
         }
