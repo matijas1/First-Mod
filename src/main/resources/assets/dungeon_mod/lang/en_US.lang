@@ -1,0 +1,8 @@
+tile.dungeon_brick.name=Dungeon Brick
+tile.dungeon_chest.name=Dungeon Chest
+tile.dungeon_portal.name=Dungeon Portal
+
+item.dungeon_staff.name=Dungeon Staff
+item.dungeon_key.name=Dungeon Key
+
+container.dungeonchest=Dungeon Chest
