@@ -91,7 +91,7 @@ public class DungeonRoomProvider {
 	{
 		int blockX = x * 16;
 		int blockZ = z * 16;
-		int stairup = 4;
+		int stairup = 5;
 
 		defaultRooms(x, z);
 		for (int i = 0; i < 16; i++) {
@@ -100,7 +100,7 @@ public class DungeonRoomProvider {
 					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
 					if (j == 16)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
-					else if((i < 7 || i >= 10 || k < 5 || k >= 8) && j == 8)
+					else if((i < 7 || i >= 10 || k < 5 || k >= 9) && j == 8)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
 					else if ((i == 0 || k == 0) && j < 16)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
