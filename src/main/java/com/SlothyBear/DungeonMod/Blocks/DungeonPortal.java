@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -22,6 +23,7 @@ import net.minecraft.world.WorldServer;
 
 public class DungeonPortal extends Block {
 	public final String name = References.dungeonPortal;
+	BlockPos lastportal;
 
 	public DungeonPortal(Material mat) {
 		super(mat);
@@ -30,6 +32,7 @@ public class DungeonPortal extends Block {
 		this.setSoundType(SoundType.STONE);
 		this.setResistance(18000000.0F);
 		this.setUnlocalizedName(name);
+		this.lastportal = null;
 
 		ModBlocks.registerBlock(this, new ItemBlock(this), name, "");
 	}
@@ -46,12 +49,34 @@ public class DungeonPortal extends Block {
 							worldserver);
 					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, 0,
 							teleporter);
+					if(heldItem.hasTagCompound())
+					{
+						BlockPos spawn = worldserver.getSpawnPoint();
+						if(heldItem.getTagCompound().hasKey("last_portal"))
+						{
+							int[] coords = heldItem.getTagCompound().getIntArray("last_portal");
+							playerIn.setPositionAndUpdate(coords[0], coords[1], coords[2]);
+							System.out.println(coords[0] + ", " + coords[1] + ", " + coords[2]);
+						}
+						else
+						{
+							int[] coords = {spawn.getX(), spawn.getY(), spawn.getZ()};
+							playerIn.setPositionAndUpdate(coords[0], coords[1], coords[2]);
+						}
+					}
 					return true;
 				} else {
 					DungeonTeleporter teleporter = new DungeonTeleporter(
 							playerIn.getServer().worldServerForDimension(References.dungeonid));
 					playerIn.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn,
 							References.dungeonid, teleporter);
+					NBTTagCompound newcompound = new NBTTagCompound();
+					int[] coords = {pos.getX(), pos.getY(), pos.getZ()};
+					System.out.println(coords[0] + ", " + coords[1] + ", " + coords[2]);
+					if(heldItem.hasTagCompound())
+						heldItem.writeToNBT(newcompound);
+					newcompound.setIntArray("last_portal", coords);
+					heldItem.setTagCompound(newcompound);
 					if(staff.portal[0] != null)
 						playerIn.setPositionAndUpdate(staff.portal[0], staff.portal[1], staff.portal[2]);
 					return true;

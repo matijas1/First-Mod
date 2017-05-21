@@ -125,6 +125,7 @@ public class EventHandler
 				NBTTagCompound compound = new NBTTagCompound();
 				chest.writeToNBT(compound);
 				compound.setString("Type", "unlocked");
+				chest.clear();
 				e.getWorld().setBlockState(e.getPos(), ModBlocks.unlockedDungeonChest.getDefaultState());
 				TileEntityDungeonChest newchest = (TileEntityDungeonChest)e.getWorld().getTileEntity(e.getPos());
 				newchest.readFromNBT(compound);
