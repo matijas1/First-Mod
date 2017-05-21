@@ -11,7 +11,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
 
 public class DungeonChunkProvider implements IChunkGenerator {
-	private static final int RNGESUS = 1000;
 
 	private World world;
 	private Random rand;
@@ -27,7 +26,6 @@ public class DungeonChunkProvider implements IChunkGenerator {
 	@Override
 	public Chunk provideChunk(int x, int z) {
 		Chunk chunk = new Chunk(world, x, z);
-		chunk.resetRelightChecks();
 		return chunk;
 	}
 
@@ -35,7 +33,7 @@ public class DungeonChunkProvider implements IChunkGenerator {
 	public void populate(int x, int z) {
 		Chunk chunk = world.getChunkFromChunkCoords(x, z);
 		DungeonRoomProvider provider = new DungeonRoomProvider(chunk);
-		provider.generateChunk(rand.nextInt(RNGESUS), x, z);
+		provider.generateChunk(rand, x, z);
 	}
 
 	@Override
