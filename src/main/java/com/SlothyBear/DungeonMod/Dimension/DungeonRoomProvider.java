@@ -6,8 +6,11 @@ import com.SlothyBear.DungeonMod.Blocks.ModBlocks;
 import com.SlothyBear.DungeonMod.LootTables.LootTables;
 import com.SlothyBear.DungeonMod.TileEntities.TileEntityDungeonChest;
 
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 
@@ -124,14 +127,14 @@ public class DungeonRoomProvider {
 	{
 		int blockX = x * 16;
 		int blockZ = z * 16;
-		int stairup = 5;
+		int stairup = 2;
 
 		defaultRooms(x, y, z);
 		for (int i = 0; i < 16; i++) {
 			for (int j = (y + 2) * 7 ; j >= (y + 1) * 7 + 1; j--) {
 				for (int k = 0; k < 16; k++) {
 					BlockPos pos = new BlockPos(blockX + i, j, blockZ + k);
-					if((i < 7 || i >= 10 || k < 5 || k >= 9) && j % 7 == 1)
+					if((i < 7 || i >= 10 || k < 2 || k >= 7) && j % 7 == 1)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
 					else if (i == 0 || k == 0)
 						chunk.setBlockState(pos, ModBlocks.dungeonBrick.getDefaultState());
@@ -144,9 +147,11 @@ public class DungeonRoomProvider {
 			for (int j = (y + 1) * 7 + 1; j >= y * 7 + 2; j--) {
 					BlockPos pos = new BlockPos(blockX + i, j, blockZ + stairup);
 					chunk.setBlockState(pos, Blocks.STONE_BRICK_STAIRS.getDefaultState());
+					if(stairup != 2)
+						chunk.setBlockState(pos.down(), Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH).withProperty(BlockStairs.HALF, EnumHalf.TOP));
 					stairup++;
 				}
-			stairup = 5;
+			stairup = 2;
 		}
 	}
 }
